@@ -23,16 +23,17 @@ const NavBar = () => {
         <ul>
           <li>Welcome, {user.username}</li>
           {/* The new link */}
-          <li><Link to='/'>Dashboard</Link></li>
+          <li><Link to='/'>HOME</Link></li>
+          <li><Link to='/hoots'>HOOTS</Link></li>
           {/* Add the Sign Out link */}
-          <li><Link to='/'onClick={handleSignOut}> Sign out </Link></li>
+          <li><Link to='/'onClick={handleSignOut}>SIGN OUT</Link></li>
         </ul>
       ) : (
         <ul>
            {/* Another new link */}
-          <li><Link to='/'>Home</Link></li>
-          <li><Link to='/sign-in'>Sign In</Link></li>
-          <li><Link to='/sign-up'>Sign Up</Link></li>
+          <li><Link to='/'>HOME</Link></li>
+          <li><Link to='/sign-in'>SIGN IN</Link></li>
+          <li><Link to='/sign-up'>SIGN UP</Link></li>
         </ul>
       )}
     </nav>
