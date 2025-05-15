@@ -1,27 +1,35 @@
 // src/components/HootDetails/HootDetails.jsx
-import { useParams } from 'react-router';
-import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router';
+import { useState, useEffect, useContext } from 'react';
 import * as hootService from '../../services/hootService';
+import CommentForm from '../CommentForm/CommentForm';
+import { UserContext } from '../../contexts/UserContext';
 
 
-const HootDetails = () => {
-    const { hootId } = useParams();
-    console.log('hootId', hootId);
-    const [hoot, setHoot] = useState(null);
+const HootDetails = (props) => {
+  const { hootId } = useParams();
+  const { user } = useContext(UserContext);
+  // console.log('hootId', hootId);
+  const [hoot, setHoot] = useState(null);
 
-    useEffect(() => {
-        const fetchHoot = async () => {
-            const hootData = await hootService.show(hootId);
-            setHoot(hootData);
-        };
-        fetchHoot();
-    }, [hootId]);
+  useEffect(() => {
+    const fetchHoot = async () => {
+      const hootData = await hootService.show(hootId);
+      setHoot(hootData);
+    };
+    fetchHoot();
+  }, [hootId]);
 
-    // Verify the hoot state is set correctly:
-    console.log('hoot state:', hoot);
+  // Verify the hoot state is set correctly:
+  console.log('hoot state:', hoot);
 
-    if (!hoot) return <main>Loading...</main>;
-     return (
+  const handleAddComment = async (commentFormData) => {
+    const newComment = await hootService.createComment(hootId, commentFormData);
+    setHoot({ ...hoot, comments: [...hoot.comments, newComment] });
+  };
+
+  if (!hoot) return <main>Loading...</main>;
+  return (
     <main>
       <section>
         <header>
@@ -31,11 +39,20 @@ const HootDetails = () => {
             {`${hoot.author.username} posted on
             ${new Date(hoot.createdAt).toLocaleDateString()}`}
           </p>
+          {hoot.author._id === user._id && (
+            <>
+              <Link to={`/hoots/${hootId}/edit`}>Edit</Link>
+              <button onClick={() => props.handleDeleteHoot(hootId)}>
+                Delete
+              </button>
+            </>
+          )}
         </header>
         <p>{hoot.text}</p>
       </section>
       <section>
         <h2>Comments</h2>
+        <CommentForm handleAddComment={handleAddComment} />
         {!hoot.comments.length && <p>There are no comments.</p>}
 
         {hoot.comments.map((comment) => (

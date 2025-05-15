@@ -25,7 +25,8 @@ const NavBar = () => {
           {/* The new link */}
           <li><Link to='/'>HOME</Link></li>
           <li><Link to='/hoots'>HOOTS</Link></li>
-          {/* Add the Sign Out link */}
+          {/* Add the NEW HOOT link */}
+          <li><Link to='/hoots/new'>NEW HOOT</Link></li>
           <li><Link to='/'onClick={handleSignOut}>SIGN OUT</Link></li>
         </ul>
       ) : (
