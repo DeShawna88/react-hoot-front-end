@@ -83,7 +83,21 @@ async function update(hootId, hootFormData) {
   } catch (error) {
     console.log(error);
   }
-}
+};
+
+const deleteComment = async (hootId, commentId) => {
+  try {
+    const res = await fetch(`${BASE_URL}/${hootId}/comments/${commentId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    return res.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export {
   index,
@@ -93,4 +107,5 @@ export {
   deleteHoot,
   // As always, remember to export:
   update,
+  deleteComment
 };

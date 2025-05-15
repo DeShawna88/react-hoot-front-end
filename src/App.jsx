@@ -48,6 +48,22 @@ const App = () => {
     navigate(`/hoots/${hootId}`);
   };
 
+  const handleDeleteComment = async (hootId, commentId) => {
+    try {
+      await hootService.deleteComment(hootId, commentId); // Ensure backend deletes it
+      setHoots(prevHoots =>
+        prevHoots.map(hoot =>
+          hoot._id === hootId
+            ? { ...hoot, comments: hoot.comments.filter(comment => comment._id !== commentId) }
+            : hoot
+        )
+      );
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      alert("Failed to delete comment. Please try again.");
+    }
+  };
+
   return (
     <>
       <NavBar />
@@ -59,8 +75,11 @@ const App = () => {
             <Route path='/hoots' element={<HootList hoots={hoots} />} />
             <Route
               path='/hoots/:hootId'
-              element={<HootDetails handleDeleteHoot={handleDeleteHoot} />}
+              element={<HootDetails handleDeleteHoot={handleDeleteHoot} handleDeleteComment={handleDeleteComment} />}
             />
+            <Route
+              path='/hoots/:hootId/comments/:commentId'
+              element={<HootDetails handleDeleteComment={handleDeleteComment} />} />
             {/* <Route path='/hoots/new' element={<h1>New Hoot</h1>} /> */}
             <Route
               path='/hoots/new'

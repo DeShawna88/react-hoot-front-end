@@ -11,6 +11,8 @@ const HootDetails = (props) => {
   const { user } = useContext(UserContext);
   // console.log('hootId', hootId);
   const [hoot, setHoot] = useState(null);
+  console.log('props:', props);
+
 
   useEffect(() => {
     const fetchHoot = async () => {
@@ -25,8 +27,12 @@ const HootDetails = (props) => {
 
   const handleAddComment = async (commentFormData) => {
     const newComment = await hootService.createComment(hootId, commentFormData);
-    setHoot({ ...hoot, comments: [...hoot.comments, newComment] });
+    setHoot(prevHoot => ({
+      ...prevHoot,
+      comments: [...prevHoot.comments, newComment],
+    }));
   };
+
 
   if (!hoot) return <main>Loading...</main>;
   return (
@@ -62,6 +68,11 @@ const HootDetails = (props) => {
                 {`${comment.author.username} posted on
                 ${new Date(comment.createdAt).toLocaleDateString()}`}
               </p>
+              {hoot.author._id === user._id && (
+                <><Link to={`/hoots/${hootId}/comments/${comment._id}/edit`}>Edit</Link>
+                  <button onClick={() => props.handleDeleteComment(hoot._id, comment._id)}>Delete</button>
+                </>
+              )}
             </header>
             <p>{comment.text}</p>
           </article>
