@@ -43,7 +43,8 @@ const App = () => {
   };
 
   const handleUpdateHoot = async (hootId, hootFormData) => {
-    console.log('hootId:', hootId, 'hootFormData:', hootFormData);
+    const updatedHoot = await hootService.update(hootId, hootFormData);
+    setHoots(hoots.map((hoot) => (hootId === hoot._id ? updatedHoot : hoot)));
     navigate(`/hoots/${hootId}`);
   };
 
@@ -67,7 +68,7 @@ const App = () => {
             />
             <Route
               path='/hoots/:hootId/edit'
-              element={<HootForm handleUpdateHoot={handleUpdateHoot}/>}
+              element={<HootForm handleUpdateHoot={handleUpdateHoot} />}
             />
           </>
         ) : (
