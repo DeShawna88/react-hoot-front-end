@@ -33,6 +33,20 @@ const HootDetails = (props) => {
     }));
   };
 
+//   const handleDeleteComment = async (commentId) => {
+//   try {
+//     const response = await deleteCommentService(commentId);
+//     if (response.success) {
+//       setHoot(prevHoot => ({
+//         ...prevHoot,
+//         comments: prevHoot.comments.filter(comment => comment._id !== commentId)
+//       }));
+//     }
+//   } catch (error) {
+//     console.error("Error deleting comment:", error);
+//   }
+// };
+
 
   if (!hoot) return <main>Loading...</main>;
   return (

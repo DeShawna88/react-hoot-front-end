@@ -1,18 +1,18 @@
 // src/App.jsx
 // Import useContext
 import { useContext, useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router'; // Import React Router
+import { Routes, Route, useNavigate } from 'react-router'; 
+import { UserContext } from './contexts/UserContext';
+import * as hootService from './services/hootService';
 import NavBar from './components/NavBar/NavBar';
 import SignUpForm from './components/SignUpForm/SignUpForm';
 import SignInForm from './components/SignInForm/SignInForm';
 import Landing from './components/Landing/Landing';
 import Dashboard from './components/Dashboard/Dashboard';
-// Import the UserContext
-import { UserContext } from './contexts/UserContext';
 import HootList from './components/HootList/HootList';
-import * as hootService from './services/hootService';
 import HootDetails from './components/HootDetails/HootDetails';
 import HootForm from './components/HootForm/HootForm';
+
 
 
 const App = () => {
