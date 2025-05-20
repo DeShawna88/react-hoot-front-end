@@ -91,7 +91,24 @@ const deleteComment = async (hootId, commentId) => {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
       },
+    });
+    return res.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateComment = async (hootId, commentId, commentFormData) => {
+  try {
+    const res = await fetch(`${BASE_URL}/${hootId}/comments/${commentId}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(commentFormData),
     });
     return res.json();
   } catch (error) {
@@ -105,7 +122,7 @@ export {
   create,
   createComment,
   deleteHoot,
-  // As always, remember to export:
   update,
-  deleteComment
+  deleteComment,
+  updateComment
 };

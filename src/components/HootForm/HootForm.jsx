@@ -28,13 +28,18 @@ const HootForm = (props) => {
   };
 
   useEffect(() => {
-    const fetchHoot = async () => {
+  const fetchHoot = async () => {
+    try {
       const hootData = await hootService.show(hootId);
       setFormData(hootData);
-    };
-    if (hootId) fetchHoot();
-    return () => setFormData({ title: '', text: '', category: 'News' });
-  }, [hootId]);
+    } catch (error) {
+      console.error("Error fetching hoot:", error);
+    }
+  };
+
+  if (hootId) fetchHoot();
+}, [hootId]);
+
   
 
   return (

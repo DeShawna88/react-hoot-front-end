@@ -1,7 +1,7 @@
 // src/App.jsx
 // Import useContext
 import { useContext, useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router'; 
+import { Routes, Route, useNavigate } from 'react-router';
 import { UserContext } from './contexts/UserContext';
 import * as hootService from './services/hootService';
 import NavBar from './components/NavBar/NavBar';
@@ -12,12 +12,14 @@ import Dashboard from './components/Dashboard/Dashboard';
 import HootList from './components/HootList/HootList';
 import HootDetails from './components/HootDetails/HootDetails';
 import HootForm from './components/HootForm/HootForm';
+import CommentForm from './components/CommentForm/CommentForm';
 
 
 
 const App = () => {
   const { user } = useContext(UserContext);
   const [hoots, setHoots] = useState([]);
+  const [comments, setComments] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,19 +51,9 @@ const App = () => {
   };
 
   const handleDeleteComment = async (hootId, commentId) => {
-    try {
-      await hootService.deleteComment(hootId, commentId); // Ensure backend deletes it
-      setHoots(prevHoots =>
-        prevHoots.map(hoot =>
-          hoot._id === hootId
-            ? { ...hoot, comments: hoot.comments.filter(comment => comment._id !== commentId) }
-            : hoot
-        )
-      );
-    } catch (error) {
-      console.error('Error deleting comment:', error);
-      alert("Failed to delete comment. Please try again.");
-    }
+    const deletedComment = await hootService.deleteComment(hootId, commentId);
+    setComments(comments.filter((comment) => comment._id !== deletedComment._id));
+    navigate(`/hoots/${hootId}`);
   };
 
   return (
@@ -75,12 +67,15 @@ const App = () => {
             <Route path='/hoots' element={<HootList hoots={hoots} />} />
             <Route
               path='/hoots/:hootId'
-              element={<HootDetails handleDeleteHoot={handleDeleteHoot} handleDeleteComment={handleDeleteComment} />}
+              element={<HootDetails handleDeleteHoot={handleDeleteHoot} />}
             />
             <Route
               path='/hoots/:hootId/comments/:commentId'
               element={<HootDetails handleDeleteComment={handleDeleteComment} />} />
-            {/* <Route path='/hoots/new' element={<h1>New Hoot</h1>} /> */}
+            <Route
+              path='/hoots/:hootId/comments/:commentId/edit'
+              element={<CommentForm />}
+            />
             <Route
               path='/hoots/new'
               element={<HootForm handleAddHoot={handleAddHoot} />}

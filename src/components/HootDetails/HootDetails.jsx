@@ -10,8 +10,9 @@ const HootDetails = (props) => {
   const { hootId } = useParams();
   const { user } = useContext(UserContext);
   // console.log('hootId', hootId);
-  const [hoot, setHoot] = useState(null);
+  const [hoot, setHoot] = useState('');
   console.log('props:', props);
+
 
 
   useEffect(() => {
@@ -33,19 +34,13 @@ const HootDetails = (props) => {
     }));
   };
 
-//   const handleDeleteComment = async (commentId) => {
-//   try {
-//     const response = await deleteCommentService(commentId);
-//     if (response.success) {
-//       setHoot(prevHoot => ({
-//         ...prevHoot,
-//         comments: prevHoot.comments.filter(comment => comment._id !== commentId)
-//       }));
-//     }
-//   } catch (error) {
-//     console.error("Error deleting comment:", error);
-//   }
-// };
+  const handleDeleteComment = async (hootId, commentId) => {
+    const deletedComment = await hootService.deleteComment(hootId, commentId);
+    setHoot(prevHoot => ({
+      ...prevHoot,
+      comments: prevHoot.comments.filter((comment) => comment._id !== commentId),
+    }));
+  };
 
 
   if (!hoot) return <main>Loading...</main>;
@@ -84,7 +79,7 @@ const HootDetails = (props) => {
               </p>
               {hoot.author._id === user._id && (
                 <><Link to={`/hoots/${hootId}/comments/${comment._id}/edit`}>Edit</Link>
-                  <button onClick={() => props.handleDeleteComment(hoot._id, comment._id)}>Delete</button>
+                  <button onClick={() => handleDeleteComment(hoot._id, comment._id)}>Delete</button>
                 </>
               )}
             </header>
